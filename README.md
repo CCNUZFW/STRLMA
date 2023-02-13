@@ -4,8 +4,9 @@
 1. [Project description](#description)
 2. [Dependencies](#dependencies)
 3. [Our process](#process)
-<br>
-## <h2 id="description"> Project description:</h2>
+## 
+
+<h2 id="description"> Project description:</h2>
 
 This repository contains the code release for our paper titled as "Source Acquisition Device Identification from Recorded Audio Based on Spatio-temporal Representation Learning with Multi-Attention Mechanisms".  
 <br>
