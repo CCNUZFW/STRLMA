@@ -1,4 +1,4 @@
-# Source Acquisition Device Identification from Recorded Audio Based on Spatio-temporal Representation Learning with Multi-Attention Mechanisms
+# STRLMA: Source Acquisition Device Identification from Recorded Audio Based on Spatio-temporal Representation Learning with Multi-Attention Mechanisms
 
 ## Table of Contents
 1. [Project description](#description)
