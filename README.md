@@ -2,10 +2,7 @@
 
 ___
 
----
-
 ## Table of Contents
----
 1. [Project description](#description)
 2. [Dependencies](#dependencies)
 3. [Our process](#process)
