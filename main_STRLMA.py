@@ -33,13 +33,14 @@ LAMBDA = 0.0005555
 
 
 def ResBlock(x,filters,kernel_size,dilation_rate):
-    h=Conv1D(filters,kernel_size,padding='same',dilation_rate=dilation_rate,activation='relu')(x) #第一卷积
-    s=Conv1D(filters,kernel_size,padding='same',dilation_rate=dilation_rate)(h) #第二卷积
-    r = Conv1D(filters, kernel_size, padding='same', dilation_rate=dilation_rate)(s)
+    h=Conv1D(filters, kernel_size, padding='same', dilation_rate=dilation_rate, activation='relu')(x)
+    s=Conv1D(filters, kernel_size, padding='same', dilation_rate=dilation_rate)(h)
+    r=Conv1D(filters, kernel_size, padding='same', dilation_rate=dilation_rate)(s)
     if x.shape[-1]==filters:
         shortcut=x
     else:
         shortcut=Conv1D(filters,kernel_size,padding='same')(x)  #shortcut（捷径）
+    d=concatenate()
     o=add([r,s,h,shortcut])
     o=Activation('relu')(o)  #激活函数
     return o
