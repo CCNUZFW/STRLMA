@@ -5,8 +5,6 @@
 2. [Dependencies](#dependencies)
 3. [Our process](#process)
 <br>
-
-
 ## <h2 id="description"> Project description:</h2>
 
 This repository contains the code release for our paper titled as "Source Acquisition Device Identification from Recorded Audio Based on Spatio-temporal Representation Learning with Multi-Attention Mechanisms".  
@@ -15,7 +13,6 @@ The code was developed in Matlab and Python. The code for the extraction of the 
 <br>
 Among the functions used for feature extraction, the melcepst function is from Voicebox Speech Signal Processing Toolkit, the gmm_em function and the mapAdapt function are from MSR Identity Toolkit.  
 <br>
-
 
 ## <h2 id="dependencies"> Dependencies:</h2>
 
@@ -31,6 +28,8 @@ Pandas==1.1.3
 - We use a dataset consisting of audio samples recorded by different devices, with the recording acquisition device as the label.
 - We extract two kinds of features by get_MFCC and get_GSV, and the parameter settings are shown in the paper.
 - We train a spatial-temporal representation learning model with a multi-attention mechanism to predict the correct recording acquisition device for a given audio sample.
+
+If you have any question, please feel free to contact us through zfwang@ccnu.edu.cn
 
 
 
