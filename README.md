@@ -13,6 +13,8 @@
 
 ## <h2 id="description"> Project description:</h2>
 ---
+CCNU_Mobile Dataset: https://github.com/CCNUZFW/CCNU_Mobile_dataset
+<br>
 This repository contains the code release for our paper titled as "Source Acquisition Device Identification from Recorded Audio Based on Spatio-temporal Representation Learning with Multi-Attention Mechanisms".  
 <br>
 The code was developed in Matlab and Python. The code for the extraction of the input features MFCC and GSV is used on Matlab , and the training and testing of the model is used on Python. The code is aimed to provide the implementation of the framework proposed in our paper to perform the identification of the audio acquisition source devices.  
