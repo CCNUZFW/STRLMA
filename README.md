@@ -1,7 +1,5 @@
 # Source Acquisition Device Identification from Recorded Audio Based on Spatio-temporal Representation Learning with Multi-Attention Mechanisms
 
-___
-
 ---
 
 ## Table of Contents
@@ -41,10 +39,9 @@ Pandas==1.1.3
 
 ## <h2 id="acknowledgements"> Acknowledgements:</h2>
 ---
-http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/voicebox.html
 
+http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/voicebox.html
 https://www.microsoft.com/en-us/download/details.aspx?id=52284
----
 If you have any question, please feel free to contact us through zfwang@ccnu.edu.cn
 
 
