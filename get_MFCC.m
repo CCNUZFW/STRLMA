@@ -1,5 +1,5 @@
 clc;
-clear all;
+clear;
 
 DataFile_train='E:\train\';
 %DataFile_test='E:\test\';
@@ -11,25 +11,8 @@ fileNum_train = length(path_file_train);
 ce=cell(fileNum_train-2,642);
 %ce_test=cell(fileNum_test-2,1);
 
-% for i=3:fileNum_train
-%     %file = [DataFile,'\',path_file(i).name];%读取DataFile的name
-%     %if (path_file(i).isdir == 1)
-%         x=path_file_train(i);
-%         data_dir_train=[DataFile_train,path_file_train(i).name];
-%         %l=size(x);
-%         %k=0;
-%         %for j=1:l(1)
-%         [sample,fs]=audioread(data_dir_train);  
-%             %[c,fc]=melcepst(sample,fs);
-%         mf =melcepst(sample,fs);
-%         mfc = cmvn(mf', true);
-%         ce_train{(i-2),1}=mfc;
-%         %end
-%     %end
-% end
-
 for i=3:fileNum_train
-    file = [DataFile_train,path_file_train(i).name];%读取DataFile的name
+    file = [DataFile_train,path_file_train(i).name];  % Read the file name from DataFile
     if (path_file_train(i).isdir == 1)
         x=find_wav(file);
         l=size(x);
@@ -37,19 +20,19 @@ for i=3:fileNum_train
         for j=1:l(1)
             [sample,fs]=audioread(x(j,:));
             %[c,fc]=melcepst(sample,fs);
-            mf =melcepst(sample,fs,'0dD');
-            mfc = cmvn(mf', true);
+            mf =melcepst(sample,fs,'0dD');             % MFCC extraction
+            mfc = cmvn(mf', true);                     % Cepstrum mean-variance normalization
             ce{(i-2),j}=mfc;
         end
     end
 end
 
-MFCC=zeros(45*642,39*64);
-MFCC_train=zeros(514*45,39*64);
-MFCC_test=zeros(128*45,39*64);
+MFCC=zeros(45*642,39*650);
+MFCC_train=zeros(514*45,39*650);
+MFCC_test=zeros(128*45,39*650);
 for i=1:45
    for j=1:642
-      MFCC((i-1)*642+j,:)=reshape((ce{i,j}(:,1:64)),1,39*64);
+      MFCC((i-1)*642+j,:)=reshape((ce{i,j}(:,1:650)),1,39*650);
    end
 end
 
