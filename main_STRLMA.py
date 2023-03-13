@@ -12,24 +12,15 @@ from keras.callbacks import LearningRateScheduler
 import keras.backend as K
 import numpy as np
 import pandas as pd
-
 from keras.layers import Conv2D, BatchNormalization, Activation, Bidirectional,GlobalAveragePooling2D
 from keras.layers import AveragePooling2D, Input, concatenate, Lambda
 from keras.regularizers import l2
 from keras.models import Model
 import tensorflow as tf
-
-
 from keras.layers import add,Input,Conv1D,Activation,Flatten,Dense
 
 
-
-# 分类问题的类数，fc层的输出单元个数
-NUM_CLASSES = 45
-# 更新中心的学习率
-ALPHA = 0.2
-# center-loss的系数
-LAMBDA = 0.0005555
+NUM_CLASSES = 45  # Number of categories of classification, number of output units of fc layer
 
 
 def ResBlock(x,filters,kernel_size,dilation_rate):
@@ -39,33 +30,48 @@ def ResBlock(x,filters,kernel_size,dilation_rate):
     if x.shape[-1]==filters:
         shortcut=x
     else:
-        shortcut=Conv1D(filters,kernel_size,padding='same')(x)  #shortcut（捷径）
+        shortcut=Conv1D(filters,kernel_size,padding='same')(x)
     d=concatenate()
     o=add([r,s,h,shortcut])
-    o=Activation('relu')(o)  #激活函数
+    o=Activation('relu')(o)
+    return o
+
+
+def ResBlock2(x,filters,kernel_size,dilation_rate):
+    h = layers.Conv1D(filters, kernel_size, padding='same', dilation_rate=dilation_rate, activation='relu')(x)
+    s = layers.Conv1D(filters, kernel_size, padding='same', dilation_rate=dilation_rate)(h)
+    r = layers.Conv1D(filters, kernel_size, padding='same', dilation_rate=dilation_rate)(s)
+    if x.shape[-1]==filters:
+        shortcut = x
+    else:
+        shortcut = layers.Conv1D(filters,kernel_size,padding='same')(x)
+    d = tf.keras.layers.Concatenate(axis=-1)([h, s, r])
+    e = layers.Conv1D(filters, 1, padding='same', dilation_rate=dilation_rate)(d)
+    o = Add([e,shortcut])
+    o = Activation('relu')(o)
     return o
 
 
 def softmax_loss(labels, features):
     """
     计算softmax-loss
-    :param labels: 等同于y_true，使用了one_hot编码，shape应为(batch_size, NUM_CLASSES)
-    :param features: 等同于y_pred，模型的最后一个FC层(不是softmax层)的输出，shape应为(batch_size, NUM_CLASSES)
-    :return: 多云分类的softmax-loss损失，shape为(batch_size, )
+    :param labels: y_true, uses one_hot encoding, shape(batch_size, NUM_CLASSES)
+    :param features: y_pred, the output of the last FC layer (not the softmax layer) of the model, shape(batch_size, NUM_CLASSES)
+    :return: softmax-loss for multi-classification, shape(batch_size, )
     """
     return K.categorical_crossentropy(labels, K.softmax(features))
 
 
 def categorical_accuracy(y_true, y_pred):
     """
-    重写categorical_accuracy函数，以适应去掉softmax层的模型
-    :param y_true: 等同于labels，
-    :param y_pred: 等同于features。
-    :return: 准确率
+    Rewrite the categorical_accuracy function to fit the model with the softmax layer removed
+    :param y_true: labels，
+    :param y_pred: features。
+    :return: accuracy
     """
-    # 计算y_pred的softmax值
+    # Calculate softmax value of y_pred
     sm_y_pred = K.softmax(y_pred)
-    # 返回准确率
+    # return accuracy
     return K.cast(K.equal(K.argmax(y_true, axis=-1), K.argmax(sm_y_pred, axis=-1)), K.floatx())
 
 
@@ -113,7 +119,7 @@ input_shape = (n_features,max_length)
 input_MFCC = keras.layers.Input(shape=[650, 39])
 input_GSV = keras.layers.Input(shape=[39, 64])
 def scheduler(epoch):
-    # 每隔30个epoch，学习率减小为原来的1/10
+    # The learning rate decreases to 1/10 of the original rate per 30 epochs.
     if epoch % 20 == 0 and epoch != 0:
         lr = K.get_value(m.optimizer.lr)
         K.set_value(m.optimizer.lr, lr * 0.1)
@@ -154,9 +160,6 @@ def build_model():
     hidden5 = ResBlock(hiddenatt18, filters=6, kernel_size=5, dilation_rate=1)
     hidden6 = ResBlock(hidden5, filters=16, kernel_size=5, dilation_rate=2)
     hidden7 = ResBlock(hidden6, filters=40, kernel_size=3, dilation_rate=4)
-
-
-
 
     #hidden5 = keras.layers.Conv2D(6, (5, 5), activation='relu', padding='same', data_format='channels_last',name='layer1_con1')(hiddenatt18)
     #hidden6 = keras.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid')(hidden5)
@@ -201,7 +204,6 @@ def build_model():
     hidden30 = keras.layers.Dense(400, activation='relu', name='layers12')(hidden29)
     hidden31 = keras.layers.Dense(128, activation='relu', name='layers13')(hidden30)
     hidden32 = Dense(45, activation='softmax', name='fc3')(hidden31)
-
 
     #model.compile(loss='categorical_crossentropy', optimizer=opt,metrics=['accuracy'])
     model = keras.models.Model(inputs=[input_MFCC,input_GSV], outputs=[hidden9,hidden50,hidden32])
